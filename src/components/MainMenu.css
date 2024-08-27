@@ -1,0 +1,46 @@
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #333;
+    color: white;
+  }
+  
+  .menu-buttons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .menu-button {
+    background-color: #444;
+    color: white;
+    padding: 15px 30px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .menu-button:hover {
+    background-color: #555;
+  }
+  
+  .how-to-play {
+    margin-top: 30px;
+  }
+  
+  .how-to-play-button {
+    background-color: #444;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .how-to-play-button:hover {
+    background-color: #555;
+  }
