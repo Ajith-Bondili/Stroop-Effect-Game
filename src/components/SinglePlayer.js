@@ -44,7 +44,7 @@ const SinglePlayer = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-1000 text-white">
+    <div className="flex flex-col items-center justify-center h-screen text-white">
       {/* Display the word with its random color */}
       <div className="text-4xl border-4 rounded-lg p-5 mb-10 text-center" style={{ color: displayColor }}>
         {displayWord}

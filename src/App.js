@@ -10,7 +10,7 @@ function App() {
   };
 
   return (
-    <div className="text-center min-h-screen flex flex-col justify-center items-center bg-gray-800 text-white">
+    <div className="text-center min-h-screen flex flex-col justify-center items-center bg-zinc-800 text-white">
       {/* Conditionally render based on the selected game mode */}
       {gameMode === null && <MainMenu onModeSelect={handleModeSelect} />}
       {gameMode === 'single-player' && <SinglePlayer />}
