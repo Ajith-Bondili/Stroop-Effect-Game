@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import SinglePlayerEasy from './SinglePlayerEasy'; // Import your Easy mode
-import SinglePlayer from './SinglePlayer'; // Import your Challenging mode
+import TwoPlayerEasy from './TwoPlayerEasy'; // Import your Easy mode
+import TwoPlayerHard from './TwoPlayerHard'; // Import your Hard mode
 
-const GameModeMenu = () => {
+const GameModeMenuTwoPlayer = () => {
   const [gameMode, setGameMode] = useState(null);
 
   if (gameMode === 'easy') {
-    return <SinglePlayerEasy />; // Link to Easy mode
+    return <TwoPlayerEasy />; // Link to Easy mode
   }
 
   if (gameMode === 'hard') {
-    return <SinglePlayer />; // Link to Challenging mode
+    return <TwoPlayerHard/>; // Link to Challenging mode
   }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-white">
-      <h1 className="text-4xl mb-10">Select Singe Player Game Mode</h1>
+      <h1 className="text-4xl mb-10">Select Two Player Game Mode</h1>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
         onClick={() => setGameMode('easy')}
@@ -32,4 +32,4 @@ const GameModeMenu = () => {
   );
 };
 
-export default GameModeMenu;
+export default GameModeMenuTwoPlayer;

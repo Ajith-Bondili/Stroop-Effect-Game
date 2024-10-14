@@ -5,12 +5,13 @@ const colors = ['Pink', 'Red', 'Purple', 'Yellow', 'White', 'Black', 'Green', 'B
 
 const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
-const TwoPlayer = () => {
+const TwoPlayerHard = () => {
   const [displayWord, setDisplayWord] = useState('');
   const [displayColor, setDisplayColor] = useState('');
   const [gridColors, setGridColors] = useState([]);
   const [scorePlayer1, setScorePlayer1] = useState(0);
   const [scorePlayer2, setScorePlayer2] = useState(0);
+  const [level, setLevel] = useState(1); // Added level state to track levels
   const [player1Position, setPlayer1Position] = useState({ x: 0, y: 0 }); // Track Player 1 position
   const [player2Position, setPlayer2Position] = useState({ x: 0, y: 0 }); // Track Player 2 position
   const [winnerDeclared, setWinnerDeclared] = useState(false); // To prevent double scoring
@@ -18,23 +19,45 @@ const TwoPlayer = () => {
   useEffect(() => {
     const generateNewWord = () => {
       const newDisplayWord = getRandomColor();
-      let newDisplayColor = newDisplayWord;
+      let newDisplayColor;
 
+      // Ensure that the target word's color is different from the word itself
       do {
         newDisplayColor = getRandomColor();
-      } while (newDisplayColor === newDisplayWord); // Make sure color doesn't match word
+      } while (newDisplayColor === newDisplayWord); // Ensure the color and word don't match
 
       setDisplayWord(newDisplayWord);
       setDisplayColor(newDisplayColor);
 
+      let gridSize = 3; // Default to 3 options for levels 1-3
+
+      if (level >= 7 && level <= 10) {
+        gridSize = 6; // Two rows of 3 colors
+      } else if (level >= 11) {
+        gridSize = 9; // Three rows of 3 colors each
+      }
+
+      // Generate shuffled grid options (the color's literal word is the correct answer)
       const remainingColors = colors.filter(color => color !== newDisplayWord);
-      const shuffledRemainingColors = remainingColors.sort(() => Math.random() - 0.5).slice(0, 8); // Show 9 choices in total
-      setGridColors([...shuffledRemainingColors, newDisplayWord].sort(() => Math.random() - 0.5));
+      const shuffledRemainingColors = remainingColors.sort(() => Math.random() - 0.5).slice(0, gridSize - 1);
+
+      // Insert the correct answer (literal word that matches the target color)
+      const correctAnswerWord = newDisplayColor; // The word should match the display color, not the word
+      const correctAnswerItem = { word: correctAnswerWord, color: getRandomColor() }; // Word is correct, color is random
+
+      const gridOptions = shuffledRemainingColors.map(color => ({
+        word: getRandomColor(),
+        color: getRandomColor(),
+      }));
+
+      gridOptions.splice(Math.floor(Math.random() * gridSize), 0, correctAnswerItem); // Insert the correct word
+
+      setGridColors(gridOptions); // Shuffle grid colors
       setWinnerDeclared(false); // Reset winner state for the new round
     };
 
     generateNewWord();
-  }, [scorePlayer1, scorePlayer2]);
+  }, [scorePlayer1, scorePlayer2, level]); // Trigger on level change as well
 
   const handlePlayerMovement = (event) => {
     if (winnerDeclared) return; // Disable movement during the pause between rounds
@@ -82,15 +105,17 @@ const TwoPlayer = () => {
   const checkWinner = (player) => {
     if (winnerDeclared) return; // Prevent multiple winners for the same round
 
-    const correctAnswer = displayWord; // The correct word to match
+    const correctAnswer = displayColor; // Match the target word's color to the literal word
     const player1Selected = gridColors[player1Position.y * 3 + player1Position.x];
     const player2Selected = gridColors[player2Position.y * 3 + player2Position.x];
 
-    if (player === 1 && player1Selected === correctAnswer) {
+    if (player === 1 && player1Selected.word === correctAnswer) {
       setScorePlayer1(scorePlayer1 + 1);
+      setLevel(level + 1); // Increment level on correct answer
       setWinnerDeclared(true);
-    } else if (player === 2 && player2Selected === correctAnswer) {
+    } else if (player === 2 && player2Selected.word === correctAnswer) {
       setScorePlayer2(scorePlayer2 + 1);
+      setLevel(level + 1); // Increment level on correct answer
       setWinnerDeclared(true);
     }
 
@@ -110,23 +135,22 @@ const TwoPlayer = () => {
     };
   }, [player1Position, player2Position, gridColors]);
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen text-white">
-      {/* Display the target word */}
-      <div className="text-4xl border-4 rounded-lg p-5 mb-10 text-center" style={{ color: displayColor }}>
-        {displayWord}
-      </div>
+  const renderGrid = () => {
+    let gridCols = 3; // Default grid columns for 3 colors
 
-      {/* Display grid where players can move and select */}
-      <div className="grid grid-cols-3 gap-5 max-w-lg">
-        {gridColors.map((color, index) => {
+    if (level >= 7 && level <= 10) gridCols = 6; // Two rows
+    if (level >= 11) gridCols = 9; // Three rows
+
+    return (
+      <div className={`grid grid-cols-${Math.min(gridCols, 3)} gap-5 max-w-lg`}>
+        {gridColors.map((colorObj, index) => {
           const isPlayer1Here = player1Position.y * 3 + player1Position.x === index;
           const isPlayer2Here = player2Position.y * 3 + player2Position.x === index;
 
           return (
             <div
               key={index}
-              className={`bg-gray-700 text-white p-10 text-2xl text-center rounded-lg border-2 ${
+              className={`bg-gray-700 p-10 text-2xl text-center rounded-lg border-2 ${
                 isPlayer1Here && isPlayer2Here
                   ? 'border-red-500 border-double border-4' // Outer red, inner blue for both players
                   : isPlayer1Here
@@ -136,23 +160,38 @@ const TwoPlayer = () => {
                   : ''
               }`}
               style={{
-                color: color.toLowerCase(), // Apply the correct color for the text (based on the word)
+                color: colorObj.color.toLowerCase(), // Use colorObj.color for the color
                 outline: isPlayer1Here && isPlayer2Here ? '4px solid blue' : '' // Inner outline blue if both players are here
               }}
             >
-              {color}
+              {colorObj.word} {/* Use colorObj.word for the word */}
             </div>
           );
         })}
       </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen text-white">
+      {/* Display the target word */}
+      <div className="text-4xl border-4 rounded-lg p-5 mb-10 text-center" style={{ color: displayColor }}>
+        {displayWord}
+      </div>
+
+      {/* Render the grid based on the level */}
+      {renderGrid()}
 
       {/* Display scores for both players */}
       <div className="text-2xl mt-10">
         <span className="text-blue-500">Player 1 - Score: {scorePlayer1}</span> |{' '}
         <span className="text-red-500">Player 2 - Score: {scorePlayer2}</span>
       </div>
+
+      {/* Display the current level */}
+      <div className="text-2xl mt-5">Level: {level}</div>
     </div>
   );
 };
 
-export default TwoPlayer;
+export default TwoPlayerHard;

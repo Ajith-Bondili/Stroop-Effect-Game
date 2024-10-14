@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GameModeMenu from './GameModeMenu.js'; // Import the Game Mode menu for 1-player
-import TwoPlayer from './TwoPlayer.js';
+import GameModeMenuTwoPlayer from './GameModeMenuTwoPlayer.js';
 
 const MainMenu = () => {
   const [menuState, setMenuState] = useState('main'); // Controls which menu to show
@@ -12,7 +12,7 @@ const MainMenu = () => {
 
   // Placeholder for 2-Player (can be added later)
   if (menuState === '2-player') {
-    return <TwoPlayer />;
+    return <GameModeMenuTwoPlayer />;
   }
 
   return (
