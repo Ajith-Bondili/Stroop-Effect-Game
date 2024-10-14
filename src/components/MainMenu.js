@@ -1,28 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import GameModeMenu from './GameModeMenu.js'; // Import the Game Mode menu for 1-player
+import TwoPlayer from './TwoPlayer.js';
 
-const MainMenu = ({ onModeSelect }) => {
+const MainMenu = () => {
+  const [menuState, setMenuState] = useState('main'); // Controls which menu to show
+
+  if (menuState === '1-player') {
+    // Show the Game Mode menu when 1-Player is selected
+    return <GameModeMenu />;
+  }
+
+  // Placeholder for 2-Player (can be added later)
+  if (menuState === '2-player') {
+    return <TwoPlayer />;
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-current-800 text-white">
-      <h1 className="text-4xl mb-8 ">Stroop Test</h1>
-      <div className="flex gap-5">
-        <button
-          className="bg-zinc-700 text-white py-3 px-6 text-lg rounded-2xl hover:bg-zinc-600"
-          onClick={() => onModeSelect('single-player')}
-        >
-          1-Player
-        </button>
-        <button
-          className="bg-zinc-700 text-white py-3 px-6 text-lg rounded-2xl hover:bg-zinc-600"
-          onClick={() => onModeSelect('two-player')}
-        >
-          2-Player <br /> Local
-        </button>
-      </div>
-      <div className="mt-8">
-        <button className="bg-zinc-700 text-white py-5 px-5 text-lg rounded-full hover:bg-zinc-600">
-          How to Play
-        </button>
-      </div>
+    <div className="flex flex-col items-center justify-center h-screen text-white">
+      <h1 className="text-4xl mb-10">Stroop Test</h1>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+        onClick={() => setMenuState('1-player')}
+      >
+        1-Player
+      </button>
+      <button
+        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => setMenuState('2-player')}
+      >
+        2-Player
+      </button>
     </div>
   );
 };
