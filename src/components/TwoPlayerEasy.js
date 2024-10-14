@@ -7,25 +7,21 @@ const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
 const TwoPlayerEasy = () => {
   const [displayWord, setDisplayWord] = useState('');
-  const [displayColor, setDisplayColor] = useState('');
   const [gridColors, setGridColors] = useState([]);
   const [scorePlayer1, setScorePlayer1] = useState(0);
   const [scorePlayer2, setScorePlayer2] = useState(0);
-  const [level, setLevel] = useState(1); // Added level state to track levels
-  const [player1Position, setPlayer1Position] = useState({ x: 0, y: 0 }); // Track Player 1 position
-  const [player2Position, setPlayer2Position] = useState({ x: 0, y: 0 }); // Track Player 2 position
-  const [winnerDeclared, setWinnerDeclared] = useState(false); // To prevent double scoring
+  const [level, setLevel] = useState(1);
+  const [player1Position, setPlayer1Position] = useState({ x: 0, y: 0 });
+  const [player2Position, setPlayer2Position] = useState({ x: 0, y: 0 });
+  const [winnerDeclared, setWinnerDeclared] = useState(false);
+  const [blink, setBlink] = useState(false);
 
   useEffect(() => {
     const generateNewWord = () => {
       const newDisplayWord = getRandomColor();
-      let newDisplayColor = newDisplayWord;
-
-      // For easy mode, make sure the display word color matches the text
       setDisplayWord(newDisplayWord);
-      setDisplayColor(newDisplayColor);
 
-      let gridSize = 3; // Default to 3 for the first few levels
+      let gridSize = 3; // Default to 3 options for levels 1-3
 
       if (level >= 7 && level <= 10) {
         gridSize = 6; // Two rows of 3 colors
@@ -35,47 +31,67 @@ const TwoPlayerEasy = () => {
 
       const remainingColors = colors.filter(color => color !== newDisplayWord);
       const shuffledRemainingColors = remainingColors.sort(() => Math.random() - 0.5).slice(0, gridSize - 1);
-      setGridColors([...shuffledRemainingColors, newDisplayWord].sort(() => Math.random() - 0.5)); // Shuffle grid colors
 
-      setWinnerDeclared(false); // Reset winner state for the new round
+      const gridOptions = shuffledRemainingColors.map(color => ({
+        word: color,
+        color: color,
+      }));
+
+      const correctAnswerItem = { word: newDisplayWord, color: newDisplayWord };
+      gridOptions.splice(Math.floor(Math.random() * gridSize), 0, correctAnswerItem);
+
+      setGridColors(gridOptions);
+      setWinnerDeclared(false);
+
+      setBlink(true);
+      setTimeout(() => {
+        setBlink(false);
+      }, 200);
     };
 
     generateNewWord();
-  }, [scorePlayer1, scorePlayer2, level]); // Trigger on level change as well
+  }, [scorePlayer1, scorePlayer2, level]);
 
   const handlePlayerMovement = (event) => {
-    if (winnerDeclared) return; // Disable movement during the pause between rounds
-
+    if (winnerDeclared) return;
+  
+    // Determine the maximum allowed positions for X and Y based on grid size
+    let maxY = 2; // Default: 3x3 grid
+    if (level >= 7 && level <= 10) maxY = 1; // Restrict to 2 rows (levels 7-10)
+    if (level < 4) maxY = 0; // Only 1 row for levels 1-3
+  
+    const maxX = Math.min(2, gridColors.length - 1); // Restrict X based on grid size
+  
     switch (event.key) {
       // Player 1 controls (WASD)
       case 'w':
-        setPlayer1Position(pos => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
+        setPlayer1Position((pos) => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
         break;
       case 's':
-        setPlayer1Position(pos => ({ ...pos, y: Math.min(pos.y + 1, 2) }));
+        setPlayer1Position((pos) => ({ ...pos, y: Math.min(pos.y + 1, maxY) }));
         break;
       case 'a':
-        setPlayer1Position(pos => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
+        setPlayer1Position((pos) => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
         break;
       case 'd':
-        setPlayer1Position(pos => ({ ...pos, x: Math.min(pos.x + 1, 2) }));
+        setPlayer1Position((pos) => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
         break;
       case 'q': // Confirm Player 1 selection
         checkWinner(1);
         break;
-
+  
       // Player 2 controls (Arrow keys)
       case 'ArrowUp':
-        setPlayer2Position(pos => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
+        setPlayer2Position((pos) => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
         break;
       case 'ArrowDown':
-        setPlayer2Position(pos => ({ ...pos, y: Math.min(pos.y + 1, 2) }));
+        setPlayer2Position((pos) => ({ ...pos, y: Math.min(pos.y + 1, maxY) }));
         break;
       case 'ArrowLeft':
-        setPlayer2Position(pos => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
+        setPlayer2Position((pos) => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
         break;
       case 'ArrowRight':
-        setPlayer2Position(pos => ({ ...pos, x: Math.min(pos.x + 1, 2) }));
+        setPlayer2Position((pos) => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
         break;
       case 'Enter': // Confirm Player 2 selection
         checkWinner(2);
@@ -87,30 +103,29 @@ const TwoPlayerEasy = () => {
 
   // Function to check if the selected box is correct
   const checkWinner = (player) => {
-    if (winnerDeclared) return; // Prevent multiple winners for the same round
+    if (winnerDeclared) return;
 
-    const correctAnswer = displayWord; // The correct word to match
+    const correctAnswer = displayWord;
     const player1Selected = gridColors[player1Position.y * 3 + player1Position.x];
     const player2Selected = gridColors[player2Position.y * 3 + player2Position.x];
 
-    if (player === 1 && player1Selected === correctAnswer) {
+    if (player === 1 && player1Selected && player1Selected.word === correctAnswer) {
       setScorePlayer1(scorePlayer1 + 1);
-      setLevel(level + 1); // Increment level on correct answer
+      setLevel(level + 1);
       setWinnerDeclared(true);
-    } else if (player === 2 && player2Selected === correctAnswer) {
+    } else if (player === 2 && player2Selected && player2Selected.word === correctAnswer) {
       setScorePlayer2(scorePlayer2 + 1);
-      setLevel(level + 1); // Increment level on correct answer
+      setLevel(level + 1);
       setWinnerDeclared(true);
     }
 
     if (winnerDeclared) {
       setTimeout(() => {
-        setWinnerDeclared(false); // Start new round after 3 seconds
-      }, 3000); // Pause for 3 seconds between rounds
+        setWinnerDeclared(false);
+      }, 3000);
     }
   };
 
-  // Add event listener for key presses
   useEffect(() => {
     window.addEventListener('keydown', handlePlayerMovement);
 
@@ -120,23 +135,23 @@ const TwoPlayerEasy = () => {
   }, [player1Position, player2Position, gridColors]);
 
   const renderGrid = () => {
-    let gridCols = 3; // Default grid columns for 3 colors
+    let gridCols = 3;
 
-    if (level >= 7 && level <= 10) gridCols = 6; // Two rows
-    if (level >= 11) gridCols = 9; // Three rows
+    if (level >= 7 && level <= 10) gridCols = 6;
+    if (level >= 11) gridCols = 9;
 
     return (
       <div className={`grid grid-cols-${Math.min(gridCols, 3)} gap-5 max-w-lg`}>
-        {gridColors.map((color, index) => {
+        {gridColors.map((colorObj, index) => {
           const isPlayer1Here = player1Position.y * 3 + player1Position.x === index;
           const isPlayer2Here = player2Position.y * 3 + player2Position.x === index;
 
           return (
             <div
               key={index}
-              className={`bg-gray-700 text-white p-10 text-2xl text-center rounded-lg border-2 ${
+              className={`bg-gray-700 p-10 text-2xl text-center rounded-lg border-2 ${
                 isPlayer1Here && isPlayer2Here
-                  ? 'border-red-500 border-double border-4' // Outer red, inner blue for both players
+                  ? 'border-red-500 border-double border-4'
                   : isPlayer1Here
                   ? 'border-blue-500 border-4'
                   : isPlayer2Here
@@ -144,11 +159,11 @@ const TwoPlayerEasy = () => {
                   : ''
               }`}
               style={{
-                color: color.toLowerCase(), // Apply the correct color for the text (based on the word)
-                outline: isPlayer1Here && isPlayer2Here ? '4px solid blue' : '' // Inner outline blue if both players are here
+                color: colorObj.color.toLowerCase(),
+                outline: isPlayer1Here && isPlayer2Here ? '4px solid blue' : ''
               }}
             >
-              {color}
+              {colorObj.word}
             </div>
           );
         })}
@@ -158,21 +173,22 @@ const TwoPlayerEasy = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen text-white">
-      {/* Display the target word */}
-      <div className="text-4xl border-4 rounded-lg p-5 mb-10 text-center" style={{ color: displayColor }}>
+      <div
+        className={`text-4xl border-4 rounded-lg p-5 mb-10 text-center transition-opacity duration-2000 ${
+          blink ? 'opacity-0' : 'opacity-100'
+        }`}
+        style={{ color: displayWord }}
+      >
         {displayWord}
       </div>
 
-      {/* Render the grid based on the level */}
       {renderGrid()}
 
-      {/* Display scores for both players */}
       <div className="text-2xl mt-10">
         <span className="text-blue-500">Player 1 - Score: {scorePlayer1}</span> |{' '}
         <span className="text-red-500">Player 2 - Score: {scorePlayer2}</span>
       </div>
 
-      {/* Display the current level */}
       <div className="text-2xl mt-5">Level: {level}</div>
     </div>
   );
