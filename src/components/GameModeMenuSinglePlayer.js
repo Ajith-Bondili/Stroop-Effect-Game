@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SinglePlayerEasy from './SinglePlayerEasy'; // Import your Easy mode
-import SinglePlayer from './SinglePlayer'; // Import your Challenging mode
+import SinglePlayerHard from './SinglePlayerHard'; // Import your Challenging mode
 
 const GameModeMenu = () => {
   const [gameMode, setGameMode] = useState(null);
@@ -10,7 +10,7 @@ const GameModeMenu = () => {
   }
 
   if (gameMode === 'hard') {
-    return <SinglePlayer />; // Link to Challenging mode
+    return <SinglePlayerHard />; // Link to Challenging mode
   }
 
   return (

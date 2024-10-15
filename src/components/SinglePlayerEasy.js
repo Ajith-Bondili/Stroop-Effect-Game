@@ -38,29 +38,33 @@ const SinglePlayerEasy = () => {
 
   useEffect(() => {
     const generateNewWord = () => {
-      const newDisplayWord = getRandomColor();
-      let newDisplayColor = newDisplayWord;
+      const newDisplayWord = getRandomColor(); // The word (text) to display
+      let newDisplayColor = getRandomColor(); // Assign a random color to the word
 
-      if (level >= 4 && level <= 7) {
-        do {
-          newDisplayColor = getRandomColor();
-        } while (newDisplayColor === newDisplayWord);
+      // Ensure the color and the word are different
+      while (newDisplayColor === newDisplayWord) {
+        newDisplayColor = getRandomColor();
       }
-      setDisplayWord(newDisplayWord);
-      setDisplayColor(newDisplayColor);
+
+      setDisplayWord(newDisplayWord); // Set the word text
+      setDisplayColor(newDisplayColor); // Set the color of the word
+
+      // Generate grid options where word and color match (for easy mode)
+      const correctAnswer = newDisplayColor; // Correct answer is based on the color of the target word
+      const remainingColors = colors.filter(color => color !== correctAnswer); // Exclude correct answer from other options
 
       let gridSize = 3;
-      if (level >= 7 && level <= 10) {
-        gridSize = 6;
-      } else if (level >= 11) {
-        gridSize = 9;
-      }
+      if (level >= 7 && level <= 10) gridSize = 6;
+      else if (level >= 11) gridSize = 9;
 
-      const remainingColors = colors.filter(color => color !== newDisplayWord);
+      // Shuffle remaining colors and select gridSize - 1 random colors, then add the correct answer
       const shuffledRemainingColors = remainingColors.sort(() => Math.random() - 0.5).slice(0, gridSize - 1);
-      const newGridColors = [...shuffledRemainingColors, newDisplayWord].sort(() => Math.random() - 0.5);
+      const newGridColors = [...shuffledRemainingColors, correctAnswer].map(color => ({
+        word: color, // Word text
+        color: color, // Word color (same as the word)
+      })).sort(() => Math.random() - 0.5); // Shuffle final grid
 
-      setGridColors(newGridColors);
+      setGridColors(newGridColors); // Set the grid colors
     };
 
     generateNewWord();
@@ -73,7 +77,8 @@ const SinglePlayerEasy = () => {
   };
 
   const handleColorSelection = (selectedWord) => {
-    if (selectedWord === displayWord) {
+    // The correct answer is the literal word that matches the color of the target word
+    if (selectedWord === displayColor) {
       const scoreIncrement = calculateScore(milliseconds);
       setScore(score + scoreIncrement);
       setLevel(level + 1);
@@ -84,18 +89,18 @@ const SinglePlayerEasy = () => {
   const renderGrid = () => {
     let gridCols = 3;
     if (level >= 7 && level <= 10) gridCols = 6;
-    if (level >= 11) gridCols = 9;
+    else if (level >= 11) gridCols = 9;
 
     return (
-      <div className={`grid grid-cols-${Math.min(gridCols, 3)} gap-5 max-w-lg`}>
-        {gridColors.map((color, index) => (
+      <div className="grid grid-cols-3 gap-5 max-w-lg">
+        {gridColors.map((colorObj, index) => (
           <div
             key={index}
             className="bg-gray-700 text-white p-10 text-2xl text-center rounded-lg border-2 border-gray-600 hover:bg-gray-600 cursor-pointer"
-            onClick={() => handleColorSelection(color)}
-            style={{ color: color }}
+            onClick={() => handleColorSelection(colorObj.word)}
+            style={{ color: colorObj.color }}
           >
-            {color}
+            {colorObj.word}
           </div>
         ))}
       </div>

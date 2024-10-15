@@ -28,7 +28,7 @@ const useTimer = () => {
   return { seconds, ms, milliseconds, resetTimer };
 };
 
-const SinglePlayer = ({ mode }) => {
+const SinglePlayerHard = ({ mode }) => {
   const [displayWord, setDisplayWord] = useState('');
   const [displayColor, setDisplayColor] = useState('');
   const [gridColors, setGridColors] = useState([]);
@@ -148,4 +148,4 @@ const SinglePlayer = ({ mode }) => {
   );
 };
 
-export default SinglePlayer;
+export default SinglePlayerHard;

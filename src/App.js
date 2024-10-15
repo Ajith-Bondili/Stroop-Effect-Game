@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MainMenu from './components/MainMenu';
-import SinglePlayer from './components/SinglePlayer';
+import SinglePlayer from './components/SinglePlayerHard';
 
 function App() {
   const [gameMode, setGameMode] = useState(null); // Track selected game mode
