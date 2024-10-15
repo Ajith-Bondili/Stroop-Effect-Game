@@ -1,12 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 
 const HowToPlay = ({ setMenuState }) => {
-  const navigate = useNavigate();
-
   return (
     <div className="flex flex-col items-center justify-center h-screen text-white">
       {/* Animate the heading with a fun drop-in effect */}
