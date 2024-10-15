@@ -70,13 +70,12 @@ const TwoPlayerHard = () => {
   const handlePlayerMovement = (event) => {
     if (winnerDeclared) return;
   
-    // Calculate max positions dynamically based on the current grid size
     let gridCols = 3;
     if (level >= 7 && level <= 10) gridCols = 6;
     if (level >= 11) gridCols = 9;
   
-    let maxY = Math.floor((gridCols - 1) / 3); // Max Y is determined by the number of rows (3 items per row)
-    let maxX = (gridCols % 3 === 0 ? 2 : (gridCols % 3) - 1); // Max X is determined by the last row
+    const maxX = (gridCols === 3 ? 2 : (gridCols % 3) === 0 ? 2 : (gridCols % 3) - 1); // Max X based on number of columns
+    const maxY = Math.floor(gridCols / 3) - 1; // Max Y based on number of rows
   
     switch (event.key) {
       // Player 1 controls (WASD)
@@ -92,7 +91,7 @@ const TwoPlayerHard = () => {
       case 'd':
         setPlayer1Position(pos => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
         break;
-      case 'q': // Confirm Player 1 selection
+      case 'q':
         checkWinner(1);
         break;
   
@@ -109,7 +108,7 @@ const TwoPlayerHard = () => {
       case 'ArrowRight':
         setPlayer2Position(pos => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
         break;
-      case 'Enter': // Confirm Player 2 selection
+      case 'Enter':
         checkWinner(2);
         break;
       default:
@@ -154,17 +153,12 @@ const TwoPlayerHard = () => {
   }, [player1Position, player2Position, gridColors]);
 
   const renderGrid = () => {
-    let gridCols = 3;
-
-    if (level >= 7 && level <= 10) gridCols = 6;
-    if (level >= 11) gridCols = 9;
-
     return (
-      <div className={`grid grid-cols-${Math.min(gridCols, 3)} gap-5 max-w-lg`}>
+      <div className={`grid grid-cols-3 gap-5 max-w-lg`}>
         {gridColors.map((colorObj, index) => {
           const isPlayer1Here = player1Position.y * 3 + player1Position.x === index;
           const isPlayer2Here = player2Position.y * 3 + player2Position.x === index;
-
+  
           return (
             <div
               key={index}
@@ -179,7 +173,7 @@ const TwoPlayerHard = () => {
               }`}
               style={{
                 color: colorObj.color.toLowerCase(),
-                outline: isPlayer1Here && isPlayer2Here ? '4px solid blue' : ''
+                outline: isPlayer1Here && isPlayer2Here ? '4px solid blue' : '',
               }}
             >
               {colorObj.word}
@@ -214,3 +208,4 @@ const TwoPlayerHard = () => {
 };
 
 export default TwoPlayerHard;
+
