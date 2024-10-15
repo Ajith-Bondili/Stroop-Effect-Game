@@ -1,7 +1,5 @@
 # Stroop Effect Game
 
-![Stroop Effect Game](path_to_your_game_image) <!-- Add a screenshot of your game -->
-
 ## Table of Contents
 
 - [Overview](#overview)
@@ -9,12 +7,11 @@
 - [Features](#features)
 - [How to Play](#how-to-play)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Overview
 
-The **Stroop Effect Game** is an interactive brain challenge based on the Stroop Effect, a psychological test where players must reconcile conflicting information between text and color. The game is built to be fun, competitive, and challenging, offering different levels of difficulty for solo or two-player gameplay. It’s designed using **React** for responsive rendering and **Framer Motion** for smooth animations and transitions.
+The **Stroop Effect Game** is an interactive brain challenge based on the Stroop Effect, a psychological test where players must reconcile conflicting information between text and color. The game is built to be fun, competitive, and challenging, offering different levels of difficulty for solo or two-player gameplay. It’s designed using **React** for responsive rendering, **Framer Motion** for smooth animations, and **React Router** for intuitive back navigation between menus.
 
 ## Game Modes
 
@@ -27,7 +24,6 @@ The **Stroop Effect Game** is an interactive brain challenge based on the Stroop
 - **Hard**: The difficulty increases with randomized color-word combinations, requiring sharper focus and quicker responses.
 
 ### 3. How to Play
-- A detailed guide on the game mechanics and controls, with visual examples to help players understand how to win.
 
 ## Features
 
@@ -53,5 +49,6 @@ The **Stroop Effect Game** is an interactive brain challenge based on the Stroop
 ## Technologies Used
 
 - **React**: Frontend framework for building dynamic interfaces.
+- **React Router**: For seamless back navigation between different game modes and menus.
 - **Framer Motion**: For adding smooth, interactive animations.
 - **Tailwind CSS**: For a responsive and modern design.
