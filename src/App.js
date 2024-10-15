@@ -1,32 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainMenu from './components/MainMenu';
-import SinglePlayer from './components/SinglePlayerHard';
+import GameModeMenuSinglePlayer from './components/GameModeMenuSinglePlayer';
+import GameModeMenuTwoPlayer from './components/GameModeMenuTwoPlayer';
+import HowToPlay from './components/HowToPlay';
+import SinglePlayerEasy from './components/SinglePlayerEasy';
+import SinglePlayerHard from './components/SinglePlayerHard';
+import TwoPlayerEasy from './components/TwoPlayerEasy';
+import TwoPlayerHard from './components/TwoPlayerHard';
 
 function App() {
-  const [gameMode, setGameMode] = useState(null); // Track selected game mode
-
-  const handleModeSelect = (mode) => {
-    setGameMode(mode); // Set game mode based on user selection
-  };
-
   return (
-    <div className="text-center min-h-screen flex flex-col justify-center items-center bg-zinc-800 text-white">
-      {/* Conditionally render based on the selected game mode */}
-      {gameMode === null && <MainMenu onModeSelect={handleModeSelect} />}
-      {gameMode === 'single-player' && <SinglePlayer />}
-      {gameMode === 'two-player' && (
-        <div>
-          {/* Placeholder for future two-player implementation */}
-          <h1 className="text-2xl mb-4">Two-Player Mode (Coming Soon)</h1>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            onClick={() => setGameMode(null)}
-          >
-            Back to Main Menu
-          </button>
-        </div>
-      )}
-    </div>
+    <Router>
+      <div className="min-h-screen flex flex-col justify-center items-center bg-zinc-800 text-white">
+        <Routes>
+          {/* Define routes for each menu and game mode */}
+          <Route path="/" element={<MainMenu />} />
+          <Route path="/single-player-menu" element={<GameModeMenuSinglePlayer />} />
+          <Route path="/two-player-menu" element={<GameModeMenuTwoPlayer />} />
+          <Route path="/how-to-play" element={<HowToPlay />} />
+          <Route path="/single-player-easy" element={<SinglePlayerEasy />} />
+          <Route path="/single-player-hard" element={<SinglePlayerHard />} />
+          <Route path="/two-player-easy" element={<TwoPlayerEasy />} />
+          <Route path="/two-player-hard" element={<TwoPlayerHard />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

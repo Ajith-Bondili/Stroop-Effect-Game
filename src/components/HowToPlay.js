@@ -33,15 +33,8 @@ const HowToPlay = ({ onBack }) => {
           </div>
         </div>
 
-        <p>This example shows the word "Green" written in red. The correct answer would be to select the word "Red" regardless of it's color.</p>
+        <p>This example shows the word "Green" written in red. The correct answer would be to select the word "Red" regardless of it's color</p>
       </div>
-      
-      <button
-        className="mt-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={onBack}
-      >
-        Back to Main Menu
-      </button>
     </div>
   );
 };

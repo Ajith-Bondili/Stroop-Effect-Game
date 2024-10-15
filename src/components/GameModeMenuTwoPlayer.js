@@ -1,33 +1,16 @@
-import React, { useState } from 'react';
-import TwoPlayerEasy from './TwoPlayerEasy'; // Import your Easy mode
-import TwoPlayerHard from './TwoPlayerHard'; // Import your Hard mode
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const GameModeMenuTwoPlayer = () => {
-  const [gameMode, setGameMode] = useState(null);
-
-  if (gameMode === 'easy') {
-    return <TwoPlayerEasy />; // Link to Easy mode
-  }
-
-  if (gameMode === 'hard') {
-    return <TwoPlayerHard/>; // Link to Challenging mode
-  }
-
   return (
     <div className="flex flex-col items-center justify-center h-screen text-white">
       <h1 className="text-4xl mb-10">Two Player Game Modes</h1>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-        onClick={() => setGameMode('easy')}
-      >
-        Beginner Friendly
-      </button>
-      <button
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => setGameMode('hard')}
-      >
-        Challenging
-      </button>
+      <Link to="/two-player-easy" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+        Easy Mode
+      </Link>
+      <Link to="/two-player-hard" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        Hard Mode
+      </Link>
     </div>
   );
 };
