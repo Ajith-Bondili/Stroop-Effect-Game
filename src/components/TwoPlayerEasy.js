@@ -54,46 +54,47 @@ const TwoPlayerEasy = () => {
 
   const handlePlayerMovement = (event) => {
     if (winnerDeclared) return;
-  
-    // Determine the maximum allowed positions for X and Y based on grid size
-    let maxY = 2; // Default: 3x3 grid
-    if (level >= 7 && level <= 10) maxY = 1; // Restrict to 2 rows (levels 7-10)
-    if (level < 4) maxY = 0; // Only 1 row for levels 1-3
-  
-    const maxX = Math.min(2, gridColors.length - 1); // Restrict X based on grid size
-  
+
+    // Determine the maximum x and y positions based on level
+    let gridCols = 3;
+    if (level >= 7 && level <= 10) gridCols = 6;
+    if (level >= 11) gridCols = 9;
+
+    let maxY = Math.floor((gridCols - 1) / 3); // Max Y is determined by the number of rows (3 items per row)
+    let maxX = (gridCols % 3 === 0 ? 2 : (gridCols % 3) - 1); // Max X is determined by the last row
+
     switch (event.key) {
       // Player 1 controls (WASD)
       case 'w':
-        setPlayer1Position((pos) => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
+        setPlayer1Position(pos => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
         break;
       case 's':
-        setPlayer1Position((pos) => ({ ...pos, y: Math.min(pos.y + 1, maxY) }));
+        setPlayer1Position(pos => ({ ...pos, y: Math.min(pos.y + 1, maxY) }));
         break;
       case 'a':
-        setPlayer1Position((pos) => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
+        setPlayer1Position(pos => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
         break;
       case 'd':
-        setPlayer1Position((pos) => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
+        setPlayer1Position(pos => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
         break;
-      case 'q': // Confirm Player 1 selection
+      case 'q':
         checkWinner(1);
         break;
-  
+
       // Player 2 controls (Arrow keys)
       case 'ArrowUp':
-        setPlayer2Position((pos) => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
+        setPlayer2Position(pos => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
         break;
       case 'ArrowDown':
-        setPlayer2Position((pos) => ({ ...pos, y: Math.min(pos.y + 1, maxY) }));
+        setPlayer2Position(pos => ({ ...pos, y: Math.min(pos.y + 1, maxY) }));
         break;
       case 'ArrowLeft':
-        setPlayer2Position((pos) => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
+        setPlayer2Position(pos => ({ ...pos, x: Math.max(pos.x - 1, 0) }));
         break;
       case 'ArrowRight':
-        setPlayer2Position((pos) => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
+        setPlayer2Position(pos => ({ ...pos, x: Math.min(pos.x + 1, maxX) }));
         break;
-      case 'Enter': // Confirm Player 2 selection
+      case 'Enter':
         checkWinner(2);
         break;
       default:
