@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 // Array of available color names
 const colors = ['Pink', 'Red', 'Purple', 'Yellow', 'White', 'Black', 'Green', 'Blue', 'Orange'];
@@ -21,7 +22,7 @@ const TwoPlayerEasy = () => {
       const newDisplayWord = getRandomColor();
       setDisplayWord(newDisplayWord);
 
-      let gridSize = 3; // Default to 3 options for levels 1-3
+      let gridSize = 3;
 
       if (level >= 7 && level <= 10) {
         gridSize = 6; // Two rows of 3 colors
@@ -55,16 +56,14 @@ const TwoPlayerEasy = () => {
   const handlePlayerMovement = (event) => {
     if (winnerDeclared) return;
 
-    // Determine the maximum x and y positions based on level
     let gridCols = 3;
     if (level >= 7 && level <= 10) gridCols = 6;
     if (level >= 11) gridCols = 9;
 
-    let maxY = Math.floor((gridCols - 1) / 3); // Max Y is determined by the number of rows (3 items per row)
-    let maxX = (gridCols % 3 === 0 ? 2 : (gridCols % 3) - 1); // Max X is determined by the last row
+    let maxY = Math.floor((gridCols - 1) / 3); 
+    let maxX = (gridCols % 3 === 0 ? 2 : (gridCols % 3) - 1);
 
     switch (event.key) {
-      // Player 1 controls (WASD)
       case 'w':
         setPlayer1Position(pos => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
         break;
@@ -80,8 +79,6 @@ const TwoPlayerEasy = () => {
       case 'q':
         checkWinner(1);
         break;
-
-      // Player 2 controls (Arrow keys)
       case 'ArrowUp':
         setPlayer2Position(pos => ({ ...pos, y: Math.max(pos.y - 1, 0) }));
         break;
@@ -102,7 +99,6 @@ const TwoPlayerEasy = () => {
     }
   };
 
-  // Function to check if the selected box is correct
   const checkWinner = (player) => {
     if (winnerDeclared) return;
 
@@ -129,7 +125,6 @@ const TwoPlayerEasy = () => {
 
   useEffect(() => {
     window.addEventListener('keydown', handlePlayerMovement);
-
     return () => {
       window.removeEventListener('keydown', handlePlayerMovement);
     };
@@ -137,51 +132,70 @@ const TwoPlayerEasy = () => {
 
   const renderGrid = () => {
     let gridCols = 3;
-
     if (level >= 7 && level <= 10) gridCols = 6;
     if (level >= 11) gridCols = 9;
-
+  
     return (
-      <div className={`grid grid-cols-${Math.min(gridCols, 3)} gap-5 max-w-lg`}>
+      <motion.div 
+        className={`grid grid-cols-${Math.min(gridCols, 3)} gap-5 max-w-lg`}
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.5, delayChildren: 0.3, staggerChildren: 0.2 }}  // Stagger grid items
+      >
         {gridColors.map((colorObj, index) => {
           const isPlayer1Here = player1Position.y * 3 + player1Position.x === index;
           const isPlayer2Here = player2Position.y * 3 + player2Position.x === index;
-
+  
           return (
-            <div
+            <motion.div
               key={index}
               className={`bg-gray-700 p-10 text-2xl text-center rounded-lg border-2 ${
                 isPlayer1Here && isPlayer2Here
-                  ? 'border-red-500 border-double border-4'
+                  ? 'border-red-500 border-double border-4'  // Outer border red for Player 2
                   : isPlayer1Here
-                  ? 'border-blue-500 border-4'
+                  ? 'border-blue-500 border-4'               // Player 1 hover (blue)
                   : isPlayer2Here
-                  ? 'border-red-500 border-4'
+                  ? 'border-red-500 border-4'                // Player 2 hover (red)
                   : ''
               }`}
               style={{
                 color: colorObj.color.toLowerCase(),
-                outline: isPlayer1Here && isPlayer2Here ? '4px solid blue' : ''
+                outline: isPlayer1Here && isPlayer2Here ? '4px solid blue' : '',  // Inner border blue for Player 1
               }}
+              whileHover={{ scale: 1.1 }} // Scale up on hover
+              whileTap={{ scale: 0.95 }}  // Scale down on tap
+              initial={{ opacity: 0, y: 50 }} 
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}  // Entry animation for each grid item
             >
               {colorObj.word}
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     );
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-white">
-      <div
+    <motion.div 
+      className="flex flex-col items-center justify-center h-screen text-white"
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }} 
+      transition={{ duration: 0.8 }}  // Fade in and out for the entire screen
+    >
+      <motion.div
         className={`text-4xl border-4 rounded-lg p-5 mb-10 text-center transition-opacity duration-2000 ${
           blink ? 'opacity-0' : 'opacity-100'
         }`}
         style={{ color: displayWord }}
+        key={displayWord}  // Key helps restart the animation when the word changes
+        initial={{ opacity: 0, y: -50 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
       >
         {displayWord}
-      </div>
+      </motion.div>
 
       {renderGrid()}
 
@@ -191,7 +205,7 @@ const TwoPlayerEasy = () => {
       </div>
 
       <div className="text-2xl mt-5">Level: {level}</div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 // Array of available color names
 const colors = ['Pink', 'Red', 'Purple', 'Yellow', 'White', 'Black', 'Green', 'Blue', 'Orange'];
@@ -92,34 +93,60 @@ const SinglePlayerEasy = () => {
     else if (level >= 11) gridCols = 9;
 
     return (
-      <div className="grid grid-cols-3 gap-5 max-w-lg">
+      <motion.div 
+        className="grid grid-cols-3 gap-5 max-w-lg"
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }} 
+        transition={{ duration: 0.5, delayChildren: 0.3, staggerChildren: 0.2 }}  // Stagger grid items
+      >
         {gridColors.map((colorObj, index) => (
-          <div
+          <motion.div
             key={index}
             className="bg-gray-700 text-white p-10 text-2xl text-center rounded-lg border-2 border-gray-600 hover:bg-gray-600 cursor-pointer"
             onClick={() => handleColorSelection(colorObj.word)}
             style={{ color: colorObj.color }}
+            whileHover={{ scale: 1.1 }}  // Scale up on hover
+            whileTap={{ scale: 0.95 }}   // Scale down on tap
+            initial={{ opacity: 0, y: 50 }} 
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}  // Add entry animation for each grid item
           >
             {colorObj.word}
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     );
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-white">
-      <div className="text-4xl border-4 rounded-lg p-5 mb-10 text-center" style={{ color: displayColor }}>
+    <motion.div 
+      className="flex flex-col items-center justify-center h-screen text-white"
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }} 
+      transition={{ duration: 0.8 }}  // Fade in and out for the entire screen
+    >
+      {/* Animate the word display */}
+      <motion.div
+        className="text-4xl border-4 rounded-lg p-5 mb-10 text-center"
+        style={{ color: displayColor }}
+        key={displayWord} // Key helps restart animation when the word changes
+        initial={{ opacity: 0, y: -50 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+      >
         {displayWord}
-      </div>
+      </motion.div>
+
       {renderGrid()}
+
       <div className="text-2xl mt-10">
         Level: {level} | Score: {score}
       </div>
       <div className="text-2xl mt-5">
         Timer: {seconds}:{ms}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
