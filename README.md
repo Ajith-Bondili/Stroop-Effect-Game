@@ -3,10 +3,9 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Technologies Used](#technologies-used)
 - [Game Modes](#game-modes)
 - [Features](#features)
-- [Technologies Used](#technologies-used)
-
 
 ## Overview
 
