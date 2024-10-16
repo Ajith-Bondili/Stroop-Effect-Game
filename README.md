@@ -22,8 +22,6 @@ The **[Stroop Effect Game](https://stroop-effect-game.vercel.app)** is a brain c
 - **Easy**: Players compete to match the color of the word to its literal word. The first to select the correct answer wins.
 - **Hard**: The difficulty increases with randomized color-word combinations, requiring sharper focus and quicker responses.
 
-### 3. How to Play
-
 ## Features
 
 - **Single Player and Two Player Modes**: Play solo or against a friend.
