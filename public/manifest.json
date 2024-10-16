@@ -3,14 +3,14 @@
   "name": "Stroop Effect Game",
   "icons": [
     {
-      "src": "image.webp",
+      "src": "image_processed.webp",
       "sizes": "192x192",
-      "type": "image/webp"
+      "type": "image_processed/webp"
     },
     {
-      "src": "image.webp",
+      "src": "image_processed.webp",
       "sizes": "512x512",
-      "type": "image/webp"
+      "type": "image_processed/webp"
     }
   ],
   "start_url": ".",
