@@ -12,6 +12,13 @@
 
 The **[Stroop Effect Game](https://stroop-effect-game.vercel.app)** is a brain challenge game based on the Stroop Effect, a psychological test where players must process conflicting information between text and color. The game is built to be fun, competitive, and challenging, offering different levels of difficulty for solo or for local two-player versus type games. The layout of the game was inspired by the minigame design in Outlast Trials.
 
+## Technologies Used
+
+- **React**: Frontend framework for building dynamic interfaces.
+- **React Router**: For seamless back navigation between different game modes and menus.
+- **Framer Motion**: For adding smooth, interactive animations.
+- **Tailwind CSS**: For a responsive and modern design.
+
 ## Game Modes
 
 ### 1. Single Player Mode
@@ -30,10 +37,4 @@ The **[Stroop Effect Game](https://stroop-effect-game.vercel.app)** is a brain c
 - **Keyboard Controls**: Player 1 uses **WASD** keys and **Q** to confirm answers, while Player 2 uses **Arrow keys** and **Enter**.
 - **Dynamic Scoring**: The faster you answer, the higher your score. Timers track the speed of each correct answer.
 - **Clean User Interface**: The UI is responsive and designed to offer a seamless experience.
-- 
-## Technologies Used
 
-- **React**: Frontend framework for building dynamic interfaces.
-- **React Router**: For seamless back navigation between different game modes and menus.
-- **Framer Motion**: For adding smooth, interactive animations.
-- **Tailwind CSS**: For a responsive and modern design.
