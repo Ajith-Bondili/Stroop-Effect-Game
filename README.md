@@ -5,7 +5,6 @@
 - [Overview](#overview)
 - [Game Modes](#game-modes)
 - [Features](#features)
-- [How to Play](#how-to-play)
 - [Technologies Used](#technologies-used)
 
 
@@ -33,19 +32,7 @@ The **[Stroop Effect Game](https://stroop-effect-game.vercel.app)** is a brain c
 - **Keyboard Controls**: Player 1 uses **WASD** keys and **Q** to confirm answers, while Player 2 uses **Arrow keys** and **Enter**.
 - **Dynamic Scoring**: The faster you answer, the higher your score. Timers track the speed of each correct answer.
 - **Clean User Interface**: The UI is responsive and designed to offer a seamless experience.
-
-## How to Play
-
-- **Objective**: Match the color of the displayed word to its literal meaning on the grid as fast as possible.
-  
-- **Controls**:
-  - **Single Player Mode**: Click on the correct answer using your mouse.
-  - **Two Player Mode**:
-    - **Player 1**: Use the **WASD** keys and press **Q** to confirm.
-    - **Player 2**: Use the **Arrow keys** and press **Enter** to confirm.
-
-- **Scoring**: Points are based on how quickly players select the correct answer. As you progress, the grid increases in size, making it more challenging.
-
+- 
 ## Technologies Used
 
 - **React**: Frontend framework for building dynamic interfaces.
