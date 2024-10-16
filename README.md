@@ -11,7 +11,7 @@
 
 ## Overview
 
-The **Stroop Effect Game** is an interactive brain challenge based on the Stroop Effect, a psychological test where players must reconcile conflicting information between text and color. The game is built to be fun, competitive, and challenging, offering different levels of difficulty for solo or two-player gameplay. It’s designed using **React** for responsive rendering, **Framer Motion** for smooth animations, and **React Router** for intuitive back navigation between menus.
+The **Stroop Effect Game** is a brain challenge game based on the Stroop Effect, a psychological test where players must process conflicting information between text and color. The game is built to be fun, competitive, and challenging, offering different levels of difficulty for solo or for local two player versus type games. The layout of the game was inspired by Outlast Trials minigame make of it.
 
 ## Game Modes
 
