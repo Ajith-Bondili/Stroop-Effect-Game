@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/stroop-effect-game/static/css/main.c800db7a.css",
+    "main.js": "/stroop-effect-game/static/js/main.60456130.js",
+    "static/js/453.a4216a63.chunk.js": "/stroop-effect-game/static/js/453.a4216a63.chunk.js",
+    "index.html": "/stroop-effect-game/index.html",
+    "main.c800db7a.css.map": "/stroop-effect-game/static/css/main.c800db7a.css.map",
+    "main.60456130.js.map": "/stroop-effect-game/static/js/main.60456130.js.map",
+    "453.a4216a63.chunk.js.map": "/stroop-effect-game/static/js/453.a4216a63.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c800db7a.css",
+    "static/js/main.60456130.js"
+  ]
+}
